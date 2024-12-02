@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: giropos
+  labels:
+    run: giropops
+spec:
+  containers:
+  - name: webserver
+    image: nginx
+    ports:
+    - containerPort: 80
+    resources:
+      limits: 
+        cpu: "0.5"
+        memory: "128Mi"
+      requests:
+        cpu: "0.3"
+        memory: "64Mi"
+    volumeMounts:
+    - mountPath: /giropops
+      name: primeiro-emptydir
+  - name: apache
+    image: bitnami/apache
+    ports:
+    - containerPort: 8082
+    resources:
+      limits: 
+        cpu: "0.5"
+        memory: "128Mi"
+      requests:
+        cpu: "0.3"
+        memory: "64Mi"
+    volumeMounts:
+    - mountPath: /giropops
+      name: primeiro-emptydir
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+  - name: primeiro-emptydir
+    emptyDir:
+      sizeLimit: 256Mi
